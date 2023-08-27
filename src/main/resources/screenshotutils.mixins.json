@@ -3,7 +3,8 @@
     "package": "com.squagward.screenshotutils.mixin",
     "compatibilityLevel": "JAVA_17",
     "client": [
-        "KeyboardMixin"
+        "KeyboardMixin",
+        "MouseMixin"
     ],
     "injectors": {
         "defaultRequire": 1

@@ -1,6 +1,7 @@
 package com.squagward.screenshotutils.mixin;
 
 import com.squagward.screenshotutils.ScreenshotUtils;
+import com.squagward.screenshotutils.hud.ScreenshotHud;
 import com.squagward.screenshotutils.screen.ScreenshotScreen;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
@@ -30,6 +31,8 @@ public class KeyboardMixin {
     )
     private void screenshotutils$openhud(File gameDirectory, Framebuffer framebuffer, Consumer<Text> messageReceiver) {
         ScreenshotUtils.INSTANCE.setDisplayScreenshotHud(true);
+        ScreenshotHud.INSTANCE.reset();
+
         if (client.currentScreen == null) {
             client.send(() -> client.setScreen(new ScreenshotScreen()));
         }
