@@ -1,27 +1,29 @@
 {
     "schemaVersion": 1,
-    "id": "examplemod",
+    "id": "screenshotutils",
     "version": "${version}",
-    "name": "ExampleMod",
-    "description": "Example client mod for Fabric using Kotlin.",
+    "name": "ScreenshotUtils",
+    "description": "Adds some more functionality to screenshots",
     "authors": [
         "Squagward"
     ],
     "contact": {
-        "homepage": "https://github.com/camnwalter/FabricExampleMod",
-        "sources": "https://github.com/camnwalter/FabricExampleMod",
-        "issues": "https://github.com/camnwalter/FabricExampleMod/issues"
+        "homepage": "https://github.com/camnwalter/ScreenshotUtils",
+        "sources": "https://github.com/camnwalter/ScreenshotUtils",
+        "issues": "https://github.com/camnwalter/ScreenshotUtils/issues"
     },
     "license": "CC0-1.0",
-    "icon": "assets/examplemod/icon.png",
+    "icon": "assets/screenshotutils/icon.png",
     "environment": "client",
     "entrypoints": {
         "client": [{
             "adapter": "kotlin",
-            "value": "com.example.ExampleMod"
+            "value": "com.squagward.screenshotutils.ScreenshotUtils"
         }]
     },
-    "mixins": ["examplemod.mixins.json"],
+    "mixins": [
+        "screenshotutils.mixins.json"
+    ],
     "depends": {
         "fabricloader": ">=0.14.21",
         "minecraft": "~1.20.1",
