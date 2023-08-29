@@ -33,7 +33,7 @@ class Config {
         fun createScreen(parent: Screen): Screen {
             return YetAnotherConfigLib.create(INSTANCE) { defaults: Config, config: Config, builder: YetAnotherConfigLib.Builder ->
                 val cropImageOption: Option<Boolean> = Option.createBuilder<Boolean>()
-                    .name(Text.literal("Crop Images"))
+                    .name(Text.literal("Crop Screenshots"))
                     .description(
                         OptionDescription.of(Text.literal("With this setting enabled, a snipping-tool like window will appear. " +
                                 "Drag the selected area you want to screenshot and only that part will be screenshotted."))

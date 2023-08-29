@@ -1,31 +1,39 @@
-# Example Client Fabric Mod with Kotlin
+# Screenshots
 
-## Setup
+Screenshots is yet another mod centered around the screenshot functionality in Minecraft.  There
+are a few features missing, in my opinion, so I decided to implement them here.
 
-### Set project SDK to Java 17+
-```
-1) Ctrl + Shift + Alt + S
-2) Set SDK version to Java 17 or above
-3) Apply
-```
+## Settings
 
-### Set Gradle JVM version to Java 17+
-```
-1) Ctrl + Alt + S
-2) Build, Execution and Deployment -> Build Tools -> Gradle
-3) Set Gradle JVM version to Java 17 or above
-4) Apply
-```
+### Crop Screenshots
+This is the main setting I've seen missing from the other screenshot mods out there. Like the
+setting suggests, this setting allows the user to crop screenshots as if they are using snipping
+tool on Windows.  Just press F2 like normal, and then drag to select the area you want to
+screenshot.
 
-### Set run configuration to Java 17+
-```
-1) Ctrl + Shift + A
-2) Type "Edit configurations"
-3) Open it
-4) Change Build and run to Java 17 or above, and the classpath to examplemod.main
-5) Apply
-```
+<details open>
+<summary>Example Preview</summary>
 
-## License
+![Crop example](assets/crop_preview.png)
+</details>
 
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+<details open>
+<summary>Result</summary>
+
+![Crop result](assets/crop_result.png)
+</details>
+
+### Save Screenshot File
+By default, screenshots will save to a file, like normal Minecraft.  However, with this setting
+disabled, that will not be the case.
+
+### Copy Screenshot to Clipboard
+This setting allows for screenshots to be copied to the clipboard.  This setting should work on
+MacOS, but it is untested.  If you run into problems please feel free to
+[make an issue](https://github.com/camnwalter/Screenshots/issues/new).
+
+-----
+
+# License
+This code is licensed under the MIT License. Information about it can be found inside the file
+titled LICENSE.
