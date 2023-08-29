@@ -9,7 +9,7 @@ fun interface ScreenDragCallback {
 }
 
 @JvmField
-val ScreenDragEvent: Event<ScreenDragCallback> = make<ScreenDragCallback> { listeners ->
+val ScreenDragEvent = make<ScreenDragCallback> { listeners ->
     ScreenDragCallback { screen, mx, my, dx, dy ->
         listeners.forEach {
             it.drag(screen, mx, my, dx, dy)
@@ -17,4 +17,6 @@ val ScreenDragEvent: Event<ScreenDragCallback> = make<ScreenDragCallback> { list
     }
 }
 
-private inline fun <reified T> make(noinline reducer: (Array<T>) -> T) = EventFactory.createArrayBacked(T::class.java, reducer)
+private inline fun <reified T> make(noinline reducer: (Array<T>) -> T): Event<T> {
+    return EventFactory.createArrayBacked(T::class.java, reducer)
+}

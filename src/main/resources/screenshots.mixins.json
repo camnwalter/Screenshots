@@ -6,6 +6,7 @@
         "KeyboardMixin",
         "MainMixin",
         "MouseMixin",
+        "ScreenMixin",
         "ScreenshotRecorderMixin"
     ],
     "injectors": {

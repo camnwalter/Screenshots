@@ -2,7 +2,9 @@ package com.squagward.screenshots.hud
 
 import com.squagward.screenshots.Screenshots
 import com.squagward.screenshots.event.ScreenDragEvent
+import com.squagward.screenshots.screen.ScreenshotScreen
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
+import net.fabricmc.fabric.api.client.screen.v1.ScreenKeyboardEvents
 import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
@@ -11,6 +13,7 @@ import net.minecraft.client.texture.NativeImage
 import net.minecraft.client.util.ScreenshotRecorder
 import net.minecraft.client.util.Window
 import net.minecraft.text.Text
+import org.lwjgl.glfw.GLFW
 import kotlin.math.max
 import kotlin.math.min
 
@@ -20,10 +23,10 @@ object ScreenshotHud {
     private val mc: MinecraftClient = MinecraftClient.getInstance()
 
     init {
-        val outside = 0x55555555
+        val outside = 0x99111111.toInt()
 
-        ScreenEvents.AFTER_INIT.register outer@{ _, screen: Screen, scaledWidth, scaledHeight ->
-            ScreenEvents.afterRender(screen).register { _, context: DrawContext, mx, my, _ ->
+        ScreenEvents.AFTER_INIT.register outer@{ _, screen: Screen, _, _ ->
+            ScreenEvents.afterRender(screen).register { _, context: DrawContext, _, _, _ ->
                 if (!Screenshots.displayScreenshotHud) return@register
 
                 val left = getLeft()
@@ -33,6 +36,8 @@ object ScreenshotHud {
 
                 val window = mc.window
 
+                context.matrices.push()
+                context.matrices.translate(0.0, 0.0, 100.0)
                 if (top != bottom && left != right) {
                     context.fill(0, 0, window.width, top.toInt(), outside)
                     context.fill(0, top.toInt(), left.toInt(), bottom.toInt(), outside)
@@ -41,22 +46,23 @@ object ScreenshotHud {
                 } else {
                     context.fill(0, 0, window.width, window.height, outside)
                 }
+                context.matrices.pop()
             }
 
-            ScreenMouseEvents.afterMouseClick(screen).register { _, mx, my, btn ->
+            ScreenMouseEvents.afterMouseClick(screen).register { _, mx, my, _ ->
                 if (!Screenshots.displayScreenshotHud) return@register
 
                 startCorner = mx to my
                 stopCorner = mx to my
             }
 
-            ScreenDragEvent.register { _, mx, my, dx, dy ->
+            ScreenDragEvent.register { _, mx, my, _, _ ->
                 if (!Screenshots.displayScreenshotHud) return@register
 
                 stopCorner = mx to my
             }
 
-            ScreenMouseEvents.afterMouseRelease(screen).register { _, mx, my, btn ->
+            ScreenMouseEvents.afterMouseRelease(screen).register { _, _, _, _ ->
                 if (!Screenshots.displayScreenshotHud) return@register
                 if (getBottom() - getTop() < 5 || getRight() - getLeft() < 5) return@register
 
@@ -64,16 +70,22 @@ object ScreenshotHud {
                     mc.execute { mc.inGameHud.chatHud.addMessage(message) }
                 }
 
-                screen.close()
+                if (screen is ScreenshotScreen) {
+                    screen.close()
+                }
                 Screenshots.displayScreenshotHud = false
+            }
+
+            ScreenKeyboardEvents.afterKeyPress(screen).register { _, key, _, _ ->
+                if (Screenshots.displayScreenshotHud && key == GLFW.GLFW_KEY_ESCAPE) {
+                    Screenshots.displayScreenshotHud = false
+                }
             }
         }
     }
 
-    // TODO: option to save the file or not,
-    //       modify the chat message
-    //       option to copy the image to clipboard
-    //       option to upload to imgur
+    // TODO: modify the chat message to allow uploading to imgur,
+    //       maybe adding an image previewer?
 
     fun cropImage(original: NativeImage): NativeImage {
         val window: Window = mc.window
