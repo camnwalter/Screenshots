@@ -18,6 +18,9 @@ repositories {
     // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
     // See https://docs.gradle.org/current/userguide/declaring_repositories.html
     // for more information about repositories.
+    maven("https://maven.isxander.dev/releases")
+    maven("https://maven.terraformersmc.com/releases")
+    maven("https://oss.sonatype.org/content/repositories/snapshots/") // for yacl stuff, temporary
 }
 
 dependencies {
@@ -27,6 +30,11 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
     modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
+
+    include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:0.2.0-beta.10")!!)!!)
+    modImplementation("dev.isxander.yacl:yet-another-config-lib-fabric:${property("yacl_version")}")
+    modApi("com.terraformersmc:modmenu:${property("modmenu_version")}")
+    implementation("ca.weblite:java-objc-bridge:1.0.0")
 }
 
 tasks {

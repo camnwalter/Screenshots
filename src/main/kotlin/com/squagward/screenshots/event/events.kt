@@ -1,4 +1,4 @@
-package com.squagward.screenshotutils.event
+package com.squagward.screenshots.event
 
 import net.fabricmc.fabric.api.event.Event
 import net.fabricmc.fabric.api.event.EventFactory

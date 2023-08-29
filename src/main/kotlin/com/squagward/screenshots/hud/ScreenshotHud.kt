@@ -1,7 +1,7 @@
-package com.squagward.screenshotutils.hud
+package com.squagward.screenshots.hud
 
-import com.squagward.screenshotutils.ScreenshotUtils
-import com.squagward.screenshotutils.event.ScreenDragEvent
+import com.squagward.screenshots.Screenshots
+import com.squagward.screenshots.event.ScreenDragEvent
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
 import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents
 import net.minecraft.client.MinecraftClient
@@ -10,9 +10,7 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.texture.NativeImage
 import net.minecraft.client.util.ScreenshotRecorder
 import net.minecraft.client.util.Window
-import net.minecraft.util.Util
-import java.io.File
-import java.io.IOException
+import net.minecraft.text.Text
 import kotlin.math.max
 import kotlin.math.min
 
@@ -26,7 +24,7 @@ object ScreenshotHud {
 
         ScreenEvents.AFTER_INIT.register outer@{ _, screen: Screen, scaledWidth, scaledHeight ->
             ScreenEvents.afterRender(screen).register { _, context: DrawContext, mx, my, _ ->
-                if (!ScreenshotUtils.displayScreenshotHud) return@register
+                if (!Screenshots.displayScreenshotHud) return@register
 
                 val left = getLeft()
                 val right = getRight()
@@ -46,75 +44,62 @@ object ScreenshotHud {
             }
 
             ScreenMouseEvents.afterMouseClick(screen).register { _, mx, my, btn ->
-                if (!ScreenshotUtils.displayScreenshotHud) return@register
+                if (!Screenshots.displayScreenshotHud) return@register
 
                 startCorner = mx to my
                 stopCorner = mx to my
             }
 
             ScreenDragEvent.register { _, mx, my, dx, dy ->
-                if (!ScreenshotUtils.displayScreenshotHud) return@register
+                if (!Screenshots.displayScreenshotHud) return@register
 
                 stopCorner = mx to my
             }
 
             ScreenMouseEvents.afterMouseRelease(screen).register { _, mx, my, btn ->
-                if (!ScreenshotUtils.displayScreenshotHud) return@register
+                if (!Screenshots.displayScreenshotHud) return@register
+                if (getBottom() - getTop() < 5 || getRight() - getLeft() < 5) return@register
 
-                takeScreenshot()
+                ScreenshotRecorder.saveScreenshot(mc.runDirectory, mc.framebuffer) { message: Text? ->
+                    mc.execute { mc.inGameHud.chatHud.addMessage(message) }
+                }
+
                 screen.close()
-                ScreenshotUtils.displayScreenshotHud = false
+                Screenshots.displayScreenshotHud = false
             }
         }
     }
 
-    private fun takeScreenshot() {
-        val left = getLeft()
-        val right = getRight()
-        val top = getTop()
-        val bottom = getBottom()
+    // TODO: option to save the file or not,
+    //       modify the chat message
+    //       option to copy the image to clipboard
+    //       option to upload to imgur
 
-        if (bottom - top < 5 || right - left < 5) return
+    fun cropImage(original: NativeImage): NativeImage {
+        val window: Window = mc.window
 
-        val fullScreenshot: NativeImage = ScreenshotRecorder.takeScreenshot(mc.framebuffer)
+        val leftInt = getLeft().toInt().coerceIn(0, window.width)
+        val rightInt = getRight().toInt().coerceIn(0, window.width)
+        val topInt = getTop().toInt().coerceIn(0, window.height)
+        val bottomInt = getBottom().toInt().coerceIn(0, window.height)
 
-        Util.getIoWorkerExecutor().execute {
-            val window: Window = mc.window
+        val width = ((rightInt - leftInt) * window.scaleFactor).toInt()
+        val height = ((bottomInt - topInt) * window.scaleFactor).toInt()
 
-            val leftInt = left.toInt().coerceIn(0, window.width)
-            val rightInt = right.toInt().coerceIn(0, window.width)
-            val topInt = top.toInt().coerceIn(0, window.height)
-            val bottomInt = bottom.toInt().coerceIn(0, window.height)
+        val croppedImage = NativeImage(width, height, false)
+        original.copyRect(
+            croppedImage,
+            (leftInt * window.scaleFactor).toInt(),
+            (topInt * window.scaleFactor).toInt(),
+            0,
+            0,
+            width,
+            height,
+            false,
+            false
+        )
 
-            val width = ((rightInt - leftInt) * window.scaleFactor).toInt()
-            val height = ((bottomInt - topInt) * window.scaleFactor).toInt()
-
-            val croppedImage = NativeImage(width, height, false)
-            fullScreenshot.copyRect(
-                croppedImage,
-                (leftInt * window.scaleFactor).toInt(),
-                (topInt * window.scaleFactor).toInt(),
-                0,
-                0,
-                width,
-                height,
-                false,
-                false
-            )
-
-            // TODO: option to save the file or not,
-            //       option to copy the image to clipboard
-            //       option to upload to imgur
-            //       modify the chat message
-            try {
-                croppedImage.writeTo(File("TESTING", "${Util.getFormattedCurrentTime()}.png"))
-            } catch (e: IOException) {
-                ScreenshotUtils.LOGGER.error("Error taking screenshot", e)
-            } finally {
-                croppedImage.close()
-                fullScreenshot.close()
-            }
-        }
+        return croppedImage
     }
 
     fun reset() {
