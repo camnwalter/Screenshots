@@ -1,7 +1,7 @@
 package com.squagward.screenshots.hud
 
 import com.squagward.screenshots.Screenshots
-import com.squagward.screenshots.event.ScreenDragEvent
+import com.squagward.screenshots.event.ScreenDragCallback
 import com.squagward.screenshots.screen.ScreenshotScreen
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
 import net.fabricmc.fabric.api.client.screen.v1.ScreenKeyboardEvents
@@ -56,7 +56,7 @@ object ScreenshotHud {
                 stopCorner = mx to my
             }
 
-            ScreenDragEvent.register { _, mx, my, _, _ ->
+            ScreenDragCallback.EVENT.register { _, mx, my, _, _ ->
                 if (!Screenshots.displayScreenshotHud) return@register
 
                 stopCorner = mx to my
@@ -83,9 +83,6 @@ object ScreenshotHud {
             }
         }
     }
-
-    // TODO: modify the chat message to allow uploading to imgur,
-    //       maybe adding an image previewer?
 
     fun cropImage(original: NativeImage): NativeImage {
         val window: Window = mc.window
