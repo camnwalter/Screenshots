@@ -35,7 +35,17 @@ object Screenshots : ClientModInitializer {
 
         Toolkit.getDefaultToolkit()
             .systemClipboard
-            .setContents(TransferableImage(bufferedImage), null)
+            .setContents(TransferableImage(rgbaToRgb(bufferedImage)), null)
+    }
+
+    private fun rgbaToRgb(image: BufferedImage): BufferedImage {
+        val newImage = BufferedImage(image.width, image.height, BufferedImage.TYPE_INT_RGB)
+        newImage.createGraphics().apply {
+            drawImage(image, 0, 0, image.width, image.height, null)
+            dispose()
+        }
+
+        return newImage
     }
 }
 
