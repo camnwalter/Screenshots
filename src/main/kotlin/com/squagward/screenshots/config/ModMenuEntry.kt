@@ -1,6 +1,5 @@
-package com.squagward.screenshots.entry
+package com.squagward.screenshots.config
 
-import com.squagward.screenshots.config.Config
 import com.terraformersmc.modmenu.api.ConfigScreenFactory
 import com.terraformersmc.modmenu.api.ModMenuApi
 

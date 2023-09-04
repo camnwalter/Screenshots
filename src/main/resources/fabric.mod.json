@@ -20,7 +20,7 @@
             "adapter": "kotlin",
             "value": "com.squagward.screenshots.Screenshots"
         }],
-        "modmenu": ["com.squagward.screenshots.entry.ModMenuEntry"]
+        "modmenu": ["com.squagward.screenshots.config.ModMenuEntry"]
     },
     "mixins": [
         "screenshots.mixins.json"
