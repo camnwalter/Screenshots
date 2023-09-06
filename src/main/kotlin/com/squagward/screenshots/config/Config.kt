@@ -33,39 +33,29 @@ class Config {
         fun createScreen(parent: Screen): Screen {
             return YetAnotherConfigLib.create(INSTANCE) { defaults: Config, config: Config, builder: YetAnotherConfigLib.Builder ->
                 val cropImageOption: Option<Boolean> = Option.createBuilder<Boolean>()
-                    .name(Text.literal("Crop Screenshots"))
-                    .description(
-                        OptionDescription.of(Text.literal("With this setting enabled, a snipping-tool like window will appear. " +
-                                "Drag the selected area you want to screenshot and only that part will be screenshotted."))
-                    )
+                    .name(Text.translatable("screenshots.setting.crop.title"))
+                    .description(OptionDescription.of(Text.translatable("screenshots.setting.crop.description")))
                     .binding(defaults.cropImage, { config.cropImage }) { config.cropImage = it }
                     .controller(TickBoxControllerBuilder::create)
                     .build()
 
                 val saveScreenshotOption: Option<Boolean> = Option.createBuilder<Boolean>()
-                    .name(Text.literal("Save Screenshot File"))
-                    .description(
-                        OptionDescription.of(Text.literal("With this setting enabled, the screenshot file will be created like usual."))
-                    )
+                    .name(Text.translatable("screenshots.setting.save_file.title"))
+                    .description(OptionDescription.of(Text.translatable("screenshots.setting.save_file.description")))
                     .binding(defaults.saveScreenshotFile, { config.saveScreenshotFile }) { config.saveScreenshotFile = it }
                     .controller(TickBoxControllerBuilder::create)
                     .build()
 
                 val copyToClipboardOption: Option<Boolean> = Option.createBuilder<Boolean>()
-                    .name(Text.literal("Copy Screenshot to Clipboard"))
-                    .description(
-                        OptionDescription.of(Text.literal("With this setting enabled, the screenshot will be copied to your clipboard."))
-                    )
+                    .name(Text.translatable("screenshots.setting.copy.title"))
+                    .description(OptionDescription.of(Text.translatable("screenshots.setting.copy.description")))
                     .binding(defaults.copyToClipboard, { config.copyToClipboard }) { config.copyToClipboard = it }
                     .controller(TickBoxControllerBuilder::create)
                     .build()
 
                 val enabledOption: Option<Boolean> = Option.createBuilder<Boolean>()
-                    .name(Text.literal("Enable Mod"))
-                    .description(
-                        OptionDescription.of(Text.literal("Disabling this setting completely disables the mod, with all functionality " +
-                                "returning to normal."))
-                    )
+                    .name(Text.translatable("screenshots.setting.enable.title"))
+                    .description(OptionDescription.of(Text.translatable("screenshots.setting.enable.description")))
                     .binding(defaults.enabled, { config.enabled }) { config.enabled = it }
                     .controller(TickBoxControllerBuilder::create)
                     .listener { _, value: Boolean ->
@@ -76,10 +66,10 @@ class Config {
                     .build()
 
                 builder
-                    .title(Text.literal("Screenshots Config"))
+                    .title(Text.translatable("screenshots.setting.title"))
                     .category(
                         ConfigCategory.createBuilder()
-                            .name(Text.literal("General"))
+                            .name(Text.translatable("screenshots.setting.general"))
                             .option(enabledOption)
                             .option(cropImageOption)
                             .option(saveScreenshotOption)

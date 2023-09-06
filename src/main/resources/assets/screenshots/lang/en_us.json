@@ -1,0 +1,16 @@
+{
+    "modmenu.nameTranslation.screenshots": "Screenshots",
+    "modmenu.summaryTranslation.screenshots": "Adds some more functionality to screenshots like cropping and copying to clipboard",
+    "modmenu.descriptionTranslation.screenshots": "Adds some more functionality to screenshots like cropping and copying to clipboard",
+
+    "screenshots.setting.title": "Screenshots Config",
+    "screenshots.setting.general": "General",
+    "screenshots.setting.enable.title": "Enable Mod",
+    "screenshots.setting.enable.description": "Disabling this setting completely disables the mod, causing all functionality returning back to normal.",
+    "screenshots.setting.crop.title": "Crop Screenshots",
+    "screenshots.setting.crop.description": "When enabled, whenever the screenshot keybind is pressed, a snipping-tool like window will appear. Drag the selected area you want to screenshot and only that part will be captured.",
+    "screenshots.setting.save_file.title": "Save Screenshot File",
+    "screenshots.setting.save_file.description": "When enabled, the screenshot file will be created like normal.",
+    "screenshots.setting.copy.title": "Copy Screenshot to Clipboard",
+    "screenshots.setting.copy.description": "When enabled, the screenshot image will be copied to the clipboard."
+}
