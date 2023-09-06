@@ -72,12 +72,20 @@ object ScreenshotHud {
 
                 if (screen is ScreenshotScreen) {
                     screen.close()
+                    Screenshots.displayScreenshotScreen = false
                 }
                 Screenshots.displayScreenshotHud = false
             }
 
             ScreenKeyboardEvents.afterKeyPress(screen).register { _, key, _, _ ->
                 if (Screenshots.displayScreenshotHud && key == GLFW.GLFW_KEY_ESCAPE) {
+                    if (screen is ScreenshotScreen) {
+                        screen.close()
+                        // can't set Screenshots.displayScreenshotScreen to false,
+                        // we need to keep the value as true so our mixin knows the ScreenshotScreen
+                        // was just closed. Otherwise, the pause menu will display as the current
+                        // screen would be null.
+                    }
                     Screenshots.displayScreenshotHud = false
                 }
             }

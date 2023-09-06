@@ -1,5 +1,6 @@
 package com.squagward.screenshots.mixin;
 
+import com.llamalad7.mixinextras.injector.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.squagward.screenshots.Screenshots;
@@ -14,6 +15,7 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 
 import java.io.File;
 import java.util.function.Consumer;
@@ -42,7 +44,18 @@ public class KeyboardMixin {
         ScreenshotHud.INSTANCE.reset();
 
         if (client.currentScreen == null) {
-            client.send(() -> client.setScreen(new ScreenshotScreen()));
+            client.send(() -> {
+                client.setScreen(new ScreenshotScreen());
+                Screenshots.INSTANCE.setDisplayScreenshotScreen(true);
+            });
         }
+    }
+
+    @WrapWithCondition(method = "onKey", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;openPauseMenu(Z)V"))
+    private boolean screenshots$dontOpenPauseMenu(MinecraftClient client, boolean pause) {
+        boolean shouldOpenPauseMenu = !Screenshots.INSTANCE.getDisplayScreenshotScreen();
+        Screenshots.INSTANCE.setDisplayScreenshotScreen(false);
+
+        return shouldOpenPauseMenu;
     }
 }

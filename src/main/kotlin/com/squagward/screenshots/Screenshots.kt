@@ -18,6 +18,7 @@ import javax.imageio.ImageIO
 
 object Screenshots : ClientModInitializer {
     var displayScreenshotHud = false
+    var displayScreenshotScreen = false
     private val LOGGER: Logger = LogManager.getLogger("Screenshots")
 
     override fun onInitializeClient() {
