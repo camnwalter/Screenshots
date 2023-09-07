@@ -1,9 +1,7 @@
 package com.squagward.screenshots.hud
 
 import com.squagward.screenshots.Screenshots
-import com.squagward.screenshots.asMixin
 import com.squagward.screenshots.event.ScreenDragCallback
-import com.squagward.screenshots.mixin.NativeImageAccessor
 import com.squagward.screenshots.screen.ScreenshotScreen
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
 import net.fabricmc.fabric.api.client.screen.v1.ScreenKeyboardEvents
