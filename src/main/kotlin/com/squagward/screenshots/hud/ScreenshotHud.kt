@@ -1,7 +1,9 @@
 package com.squagward.screenshots.hud
 
 import com.squagward.screenshots.Screenshots
+import com.squagward.screenshots.asMixin
 import com.squagward.screenshots.event.ScreenDragCallback
+import com.squagward.screenshots.mixin.NativeImageAccessor
 import com.squagward.screenshots.screen.ScreenshotScreen
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
 import net.fabricmc.fabric.api.client.screen.v1.ScreenKeyboardEvents
@@ -21,6 +23,8 @@ object ScreenshotHud {
     private var startCorner = 0.0 to 0.0
     private var stopCorner = 0.0 to 0.0
     private val mc: MinecraftClient = MinecraftClient.getInstance()
+    private val window: Window
+        get() = mc.window
 
     init {
         val outside = 0x99111111.toInt()
@@ -33,8 +37,6 @@ object ScreenshotHud {
                 val right = getRight()
                 val top = getTop()
                 val bottom = getBottom()
-
-                val window = mc.window
 
                 context.matrices.push()
                 context.matrices.translate(0.0, 0.0, 100.0)
@@ -93,28 +95,30 @@ object ScreenshotHud {
     }
 
     fun cropImage(original: NativeImage): NativeImage {
-        val window: Window = mc.window
+        val left = getLeft().coerceIn(0.0, window.width.toDouble() - 1)
+        val right = getRight().coerceIn(0.0, window.width.toDouble() - 1)
+        val top = getTop().coerceIn(0.0, window.height.toDouble() - 1)
+        val bottom = getBottom().coerceIn(0.0, window.height.toDouble() - 1)
 
-        val leftInt = getLeft().toInt().coerceIn(0, window.width)
-        val rightInt = getRight().toInt().coerceIn(0, window.width)
-        val topInt = getTop().toInt().coerceIn(0, window.height)
-        val bottomInt = getBottom().toInt().coerceIn(0, window.height)
+        var width = ((right - left) * window.scaleFactor).toInt()
+        var height = ((bottom - top) * window.scaleFactor).toInt()
 
-        val width = ((rightInt - leftInt) * window.scaleFactor).toInt()
-        val height = ((bottomInt - topInt) * window.scaleFactor).toInt()
+        // Now that these are scaled, the width & height can actually go out of bounds. So we make
+        // the stopping coords at most be the right and bottom of the original image,
+        // and update the width & height accordingly. We don't have to do this with the starting
+        // coords, as those will always be a minimum of 0.
+
+        val startingX = (left * window.scaleFactor).toInt()
+        val startingY = (top * window.scaleFactor).toInt()
+
+        val stopX = min(original.width - 1, startingX + width)
+        val stopY = min(original.height - 1, startingY + height)
+
+        width = stopX - startingX
+        height = stopY - startingY
 
         val croppedImage = NativeImage(width, height, false)
-        original.copyRect(
-            croppedImage,
-            (leftInt * window.scaleFactor).toInt(),
-            (topInt * window.scaleFactor).toInt(),
-            0,
-            0,
-            width,
-            height,
-            false,
-            false
-        )
+        original.copyRect(croppedImage, startingX, startingY, 0, 0, width, height, false, false)
 
         return croppedImage
     }

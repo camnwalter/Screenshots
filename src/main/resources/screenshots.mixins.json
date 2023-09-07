@@ -6,6 +6,7 @@
         "KeyboardMixin",
         "MainMixin",
         "MouseMixin",
+        "NativeImageAccessor",
         "ScreenMixin",
         "ScreenshotRecorderMixin"
     ],
