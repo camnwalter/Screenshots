@@ -4,7 +4,10 @@ import com.squagward.screenshots.compat.MacOSCompat
 import com.squagward.screenshots.config.Config
 import com.squagward.screenshots.hud.ScreenshotHud
 import net.fabricmc.api.ClientModInitializer
+import net.minecraft.client.MinecraftClient
 import net.minecraft.client.texture.NativeImage
+import net.minecraft.text.Text
+import net.minecraft.util.Formatting
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import java.awt.Image
@@ -34,11 +37,17 @@ object Screenshots : ClientModInitializer {
             return
         }
 
-        val bufferedImage: BufferedImage = ImageIO.read(ByteArrayInputStream(image.bytes))
+        try {
+            val bufferedImage: BufferedImage = ImageIO.read(ByteArrayInputStream(image.bytes))
 
-        Toolkit.getDefaultToolkit()
-            .systemClipboard
-            .setContents(TransferableImage(rgbaToRgb(bufferedImage)), null)
+            Toolkit.getDefaultToolkit()
+                .systemClipboard
+                .setContents(TransferableImage(rgbaToRgb(bufferedImage)), null)
+        } catch (e: Exception) {
+            MinecraftClient.getInstance().inGameHud.chatHud.addMessage(
+                Text.translatable("screenshots.error.copy").formatted(Formatting.RED)
+            )
+        }
     }
 
     private fun rgbaToRgb(image: BufferedImage): BufferedImage {

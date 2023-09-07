@@ -3,7 +3,7 @@
     "id": "screenshots",
     "version": "${version}",
     "name": "Screenshots",
-    "description": "Adds some more functionality to screenshots like cropping and copying to clipboard",
+    "description": "Adds some more functionality to screenshots like cropping and copying to clipboard.",
     "authors": [
         "Squagward"
     ],

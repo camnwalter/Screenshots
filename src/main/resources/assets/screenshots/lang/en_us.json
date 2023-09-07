@@ -1,7 +1,9 @@
 {
     "modmenu.nameTranslation.screenshots": "Screenshots",
-    "modmenu.summaryTranslation.screenshots": "Adds some more functionality to screenshots like cropping and copying to clipboard",
-    "modmenu.descriptionTranslation.screenshots": "Adds some more functionality to screenshots like cropping and copying to clipboard",
+    "modmenu.summaryTranslation.screenshots": "Adds some more functionality to screenshots like cropping and copying to clipboard.",
+    "modmenu.descriptionTranslation.screenshots": "Adds some more functionality to screenshots like cropping and copying to clipboard.",
+
+    "screenshots.error.copy": "Screenshots was unable to copy the screenshot to the clipboard.",
 
     "screenshots.setting.title": "Screenshots Config",
     "screenshots.setting.general": "General",
