@@ -12,7 +12,7 @@
     "screenshots.setting.crop.title": "Crop Screenshots",
     "screenshots.setting.crop.description": "When enabled, whenever the screenshot keybind is pressed, a snipping-tool like window will appear. Drag the selected area you want to screenshot and only that part will be captured.",
     "screenshots.setting.pause_crop.title": "Pause Game While Cropping",
-    "screenshots.setting.pause_crop.description": "When enabled, whenever the cropping HUD is displayed, the game will \"pause\", by capturing the screen and rendering on top.",
+    "screenshots.setting.pause_crop.description": "When enabled, whenever the cropping HUD is displayed, the game will appear paused.",
     "screenshots.setting.save_file.title": "Save Screenshot File",
     "screenshots.setting.save_file.description": "When enabled, the screenshot file will be created like normal.",
     "screenshots.setting.copy.title": "Copy Screenshot to Clipboard",

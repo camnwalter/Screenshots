@@ -23,6 +23,9 @@ screenshot.
 ![Crop result](assets/crop_result.png)
 </details>
 
+### Pause Game While Cropping
+This setting allows for the game to appear to be paused while the cropping HUD is rendered.
+
 ### Save Screenshot File
 By default, screenshots will save to a file, like normal Minecraft.  However, with this setting
 disabled, that will not be the case.
