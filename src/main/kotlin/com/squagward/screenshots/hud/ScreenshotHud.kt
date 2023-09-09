@@ -38,8 +38,6 @@ object ScreenshotHud {
             ScreenEvents.afterRender(screen).register { _, context: DrawContext, _, _, _ ->
                 if (!Screenshots.displayScreenshotHud) return@register
 
-
-
                 val left = getLeft()
                 val right = getRight()
                 val top = getTop()
@@ -118,13 +116,7 @@ object ScreenshotHud {
     private fun renderPausedBackground(ctx: DrawContext) {
         if (image == null) {
             image = ScreenshotRecorder.takeScreenshot(mc.framebuffer)
-
-            if (texture == null) {
-                texture = NativeImageBackedTexture(image)
-            } else {
-                texture!!.image = image
-                texture!!.upload()
-            }
+            texture = NativeImageBackedTexture(image)
             mc.textureManager.registerTexture(backgroundId, texture)
         }
 
