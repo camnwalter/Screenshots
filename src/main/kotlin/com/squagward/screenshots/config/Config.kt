@@ -19,6 +19,9 @@ class Config {
     var cropImage = true
 
     @ConfigEntry
+    var pauseGameWhileCropping = true
+
+    @ConfigEntry
     var saveScreenshotFile = true
 
     @ConfigEntry
@@ -32,11 +35,21 @@ class Config {
 
         fun createScreen(parent: Screen): Screen {
             return YetAnotherConfigLib.create(INSTANCE) { defaults: Config, config: Config, builder: YetAnotherConfigLib.Builder ->
+                val pauseGameWhileCroppingOption: Option<Boolean> = Option.createBuilder<Boolean>()
+                    .name(Text.translatable("screenshots.setting.pause_crop.title"))
+                    .description(OptionDescription.of(Text.translatable("screenshots.setting.pause_crop.description")))
+                    .binding(defaults.pauseGameWhileCropping, { config.pauseGameWhileCropping }) { config.pauseGameWhileCropping = it }
+                    .controller(TickBoxControllerBuilder::create)
+                    .build()
+
                 val cropImageOption: Option<Boolean> = Option.createBuilder<Boolean>()
                     .name(Text.translatable("screenshots.setting.crop.title"))
                     .description(OptionDescription.of(Text.translatable("screenshots.setting.crop.description")))
                     .binding(defaults.cropImage, { config.cropImage }) { config.cropImage = it }
                     .controller(TickBoxControllerBuilder::create)
+                    .listener { _, value: Boolean ->
+                        pauseGameWhileCroppingOption.setAvailable(value)
+                    }
                     .build()
 
                 val saveScreenshotOption: Option<Boolean> = Option.createBuilder<Boolean>()
@@ -59,6 +72,7 @@ class Config {
                     .binding(defaults.enabled, { config.enabled }) { config.enabled = it }
                     .controller(TickBoxControllerBuilder::create)
                     .listener { _, value: Boolean ->
+                        pauseGameWhileCroppingOption.setAvailable(value)
                         cropImageOption.setAvailable(value)
                         saveScreenshotOption.setAvailable(value)
                         copyToClipboardOption.setAvailable(value)
@@ -72,6 +86,7 @@ class Config {
                             .name(Text.translatable("screenshots.setting.general"))
                             .option(enabledOption)
                             .option(cropImageOption)
+                            .option(pauseGameWhileCroppingOption)
                             .option(saveScreenshotOption)
                             .option(copyToClipboardOption)
                             .build()

@@ -1,6 +1,7 @@
 package com.squagward.screenshots.hud
 
 import com.squagward.screenshots.Screenshots
+import com.squagward.screenshots.config.Config
 import com.squagward.screenshots.event.ScreenDragCallback
 import com.squagward.screenshots.screen.ScreenshotScreen
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
@@ -10,9 +11,11 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.texture.NativeImage
+import net.minecraft.client.texture.NativeImageBackedTexture
 import net.minecraft.client.util.ScreenshotRecorder
 import net.minecraft.client.util.Window
 import net.minecraft.text.Text
+import net.minecraft.util.Identifier
 import org.lwjgl.glfw.GLFW
 import kotlin.math.max
 import kotlin.math.min
@@ -23,6 +26,10 @@ object ScreenshotHud {
     private val mc: MinecraftClient = MinecraftClient.getInstance()
     private val window: Window
         get() = mc.window
+    private var image: NativeImage? = null
+    private var texture: NativeImageBackedTexture? = null
+
+    private val backgroundId = Identifier("screenshots", "textures/background.png")
 
     init {
         val outside = 0x99111111.toInt()
@@ -31,13 +38,20 @@ object ScreenshotHud {
             ScreenEvents.afterRender(screen).register { _, context: DrawContext, _, _, _ ->
                 if (!Screenshots.displayScreenshotHud) return@register
 
+
+
                 val left = getLeft()
                 val right = getRight()
                 val top = getTop()
                 val bottom = getBottom()
 
                 context.matrices.push()
-                context.matrices.translate(0.0, 0.0, 100.0)
+                context.matrices.translate(0f, 0f, 100f)
+
+                if (Config.INSTANCE.config.pauseGameWhileCropping) {
+                    renderPausedBackground(context)
+                }
+
                 if (top != bottom && left != right) {
                     context.fill(0, 0, window.width, top.toInt(), outside)
                     context.fill(0, top.toInt(), left.toInt(), bottom.toInt(), outside)
@@ -66,7 +80,10 @@ object ScreenshotHud {
                 if (!Screenshots.displayScreenshotHud) return@register
                 if (getBottom() - getTop() < 5 || getRight() - getLeft() < 5) return@register
 
-                ScreenshotRecorder.saveScreenshot(mc.runDirectory, mc.framebuffer) { message: Text? ->
+                ScreenshotRecorder.saveScreenshot(
+                    mc.runDirectory,
+                    mc.framebuffer
+                ) { message: Text? ->
                     mc.execute { mc.inGameHud.chatHud.addMessage(message) }
                 }
 
@@ -75,6 +92,9 @@ object ScreenshotHud {
                     Screenshots.displayScreenshotScreen = false
                 }
                 Screenshots.displayScreenshotHud = false
+                texture?.close()
+                texture = null
+                image = null
             }
 
             ScreenKeyboardEvents.afterKeyPress(screen).register { _, key, _, _ ->
@@ -87,9 +107,46 @@ object ScreenshotHud {
                         // screen would be null.
                     }
                     Screenshots.displayScreenshotHud = false
+                    texture?.close()
+                    texture = null
+                    image = null
                 }
             }
         }
+    }
+
+    private fun renderPausedBackground(ctx: DrawContext) {
+        if (image == null) {
+            image = ScreenshotRecorder.takeScreenshot(mc.framebuffer)
+
+            if (texture == null) {
+                texture = NativeImageBackedTexture(image)
+            } else {
+                texture!!.image = image
+                texture!!.upload()
+            }
+            mc.textureManager.registerTexture(backgroundId, texture)
+        }
+
+        ctx.matrices.push()
+        ctx.matrices.scale(
+            (1 / window.scaleFactor).toFloat(),
+            (1 / window.scaleFactor).toFloat(),
+            1f
+        )
+
+        ctx.drawTexture(
+            backgroundId,
+            0,
+            0,
+            0f,
+            0f,
+            window.width,
+            window.height,
+            image!!.width,
+            image!!.height
+        )
+        ctx.matrices.pop()
     }
 
     fun cropImage(original: NativeImage): NativeImage {
