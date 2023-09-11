@@ -28,13 +28,14 @@ object ScreenshotHud {
         get() = mc.window
     private var image: NativeImage? = null
     private var texture: NativeImageBackedTexture? = null
-
-    private val backgroundId = Identifier("screenshots", "textures/background.png")
+    private val id = Identifier("screenshots", "textures/background.png")
 
     init {
         val outside = 0x99111111.toInt()
 
         ScreenEvents.AFTER_INIT.register outer@{ _, screen: Screen, _, _ ->
+            destroy()
+
             ScreenEvents.afterRender(screen).register { _, context: DrawContext, _, _, _ ->
                 if (!Screenshots.displayScreenshotHud) return@register
 
@@ -90,9 +91,8 @@ object ScreenshotHud {
                     Screenshots.displayScreenshotScreen = false
                 }
                 Screenshots.displayScreenshotHud = false
-                texture?.close()
-                texture = null
-                image = null
+
+                destroy()
             }
 
             ScreenKeyboardEvents.afterKeyPress(screen).register { _, key, _, _ ->
@@ -105,20 +105,29 @@ object ScreenshotHud {
                         // screen would be null.
                     }
                     Screenshots.displayScreenshotHud = false
-                    texture?.close()
-                    texture = null
-                    image = null
+
+                    destroy()
                 }
             }
         }
     }
 
-    private fun renderPausedBackground(ctx: DrawContext) {
+    private fun destroy() {
+        texture?.close()
+        texture = null
+        image = null
+    }
+
+    private fun updateImage() {
         if (image == null) {
             image = ScreenshotRecorder.takeScreenshot(mc.framebuffer)
             texture = NativeImageBackedTexture(image)
-            mc.textureManager.registerTexture(backgroundId, texture)
+            mc.textureManager.registerTexture(id, texture)
         }
+    }
+
+    private fun renderPausedBackground(ctx: DrawContext) {
+        updateImage()
 
         ctx.matrices.push()
         ctx.matrices.scale(
@@ -128,7 +137,7 @@ object ScreenshotHud {
         )
 
         ctx.drawTexture(
-            backgroundId,
+            id,
             0,
             0,
             0f,
