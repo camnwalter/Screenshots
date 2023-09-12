@@ -51,7 +51,7 @@ public class KeyboardMixin {
         }
     }
 
-    @WrapWithCondition(method = "onKey", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;openPauseMenu(Z)V"))
+    @WrapWithCondition(method = "onKey", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;openGameMenu(Z)V"))
     private boolean screenshots$dontOpenPauseMenu(MinecraftClient client, boolean pause) {
         boolean shouldOpenPauseMenu = !Screenshots.INSTANCE.getDisplayScreenshotScreen();
         Screenshots.INSTANCE.setDisplayScreenshotScreen(false);
