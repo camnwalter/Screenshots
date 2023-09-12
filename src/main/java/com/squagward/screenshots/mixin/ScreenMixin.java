@@ -13,7 +13,7 @@ public class ScreenMixin {
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void screenshots$ignoreKeyPress(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         if (Screenshots.INSTANCE.getDisplayScreenshotHud() && keyCode == GLFW.GLFW_KEY_ESCAPE) {
-            cir.setReturnValue(false);
+            cir.setReturnValue(true);
         }
     }
 }
