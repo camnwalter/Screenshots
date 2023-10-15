@@ -1,4 +1,19 @@
 {
-  "modmenu.summaryTranslation.screenshots": "Экран сурәтләре өчен кисү һәм алмашу буферына күчереп алу кебек бераз күбрәк функцияләр"
-  "modmenu.descriptionTranslation.screenshots": "Экран сурәтләре өчен кисү һәм алмашу буферына күчереп алу кебек бераз күбрәк функцияләрне өсти"
+    "modmenu.summaryTranslation.screenshots": "Экран сурәтләре өчен кистерү һәм алмашу буферына күчереп алу кебек бераз күбрәк функцияләр",
+    "modmenu.descriptionTranslation.screenshots": "Экран сурәтләре өчен кистерү һәм алмашу буферына күчереп алу кебек бераз күбрәк функцияләрне өсти",
+
+    "screenshots.error.copy": "Screenshots моды экран сурәтен алмашу буферында күчереп алмады.",
+
+    "screenshots.setting.title": "Screenshots көйләүләре",
+    "screenshots.setting.general": "Гомуми",
+    "screenshots.setting.enable.title": "Модны кушу",
+    "screenshots.setting.enable.description": "Бу көйләүне сүндерү модны тулысынча сүндерә, нәтиҗәдә барлык функцияләр дә әүвәлгә кайта.",
+    "screenshots.setting.crop.title": "Экран сурәтләрен кистерү",
+    "screenshots.setting.crop.description": "Әгәр кушса, экран сурәте өчен төймәгә һәр басылган вакытта кисеп алу чарасына (кайчыга) охшаган тәрәзә күренәчәк. Сез сурәтне ясарга теләгән сайлап алынган төбәкне күчерегез һәм бу өлеш генә төшереләчәк.",
+    "screenshots.setting.pause_crop.title": "Кистерелгәндә уенны туктатып тору",
+    "screenshots.setting.pause_crop.description": "Әгәр кушса, һәр күренгән вакытта кистерү интерфейсын уен туктатып торылачак.",
+    "screenshots.setting.save_file.title": "Экран сурәте файлын саклау",
+    "screenshots.setting.save_file.description": "Әгәр кушса, экран сурәте файлы гади кебек ясаячак.",
+    "screenshots.setting.copy.title": "Алмашу буферында экран сурәтне күчереп алу",
+    "screenshots.setting.copy.description": "Әгәр кушса, экран сурәте алмашу буферында күчереп алыначак."
 }
