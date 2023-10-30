@@ -5,6 +5,6 @@ import com.terraformersmc.modmenu.api.ModMenuApi
 
 class ModMenuEntry : ModMenuApi {
     override fun getModConfigScreenFactory(): ConfigScreenFactory<*> {
-        return ConfigScreenFactory(Config::createScreen)
+        return ConfigScreenFactory(ScreenshotsConfig::createScreen)
     }
 }

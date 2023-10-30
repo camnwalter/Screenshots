@@ -31,7 +31,7 @@ dependencies {
     modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
     modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
 
-    include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:0.2.0-beta.10")!!)!!)
+    include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:${property("mixin_extras_version")}")!!)!!)
     modImplementation("dev.isxander.yacl:yet-another-config-lib-fabric:${property("yacl_version")}")
     modApi("com.terraformersmc:modmenu:${property("modmenu_version")}")
     implementation("ca.weblite:java-objc-bridge:1.0.0")

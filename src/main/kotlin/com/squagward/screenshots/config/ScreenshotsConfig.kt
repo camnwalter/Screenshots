@@ -5,36 +5,41 @@ import dev.isxander.yacl3.api.Option
 import dev.isxander.yacl3.api.OptionDescription
 import dev.isxander.yacl3.api.YetAnotherConfigLib
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder
-import dev.isxander.yacl3.config.ConfigEntry
-import dev.isxander.yacl3.config.GsonConfigInstance
+import dev.isxander.yacl3.config.v2.api.ConfigClassHandler
+import dev.isxander.yacl3.config.v2.api.SerialEntry
+import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder
+import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.text.Text
-import java.nio.file.Path
 
-class Config {
-    @ConfigEntry
+class ScreenshotsConfig {
+    @SerialEntry
     var enabled = true
 
-    @ConfigEntry
+    @SerialEntry
     var cropImage = true
 
-    @ConfigEntry
+    @SerialEntry
     var pauseGameWhileCropping = true
 
-    @ConfigEntry
+    @SerialEntry
     var saveScreenshotFile = true
 
-    @ConfigEntry
+    @SerialEntry
     var copyToClipboard = true
 
     companion object {
         @JvmField
-        val INSTANCE: GsonConfigInstance<Config> = GsonConfigInstance.createBuilder(Config::class.java)
-            .setPath(Path.of("config", "screenshots.json"))
+        val CONFIG: ConfigClassHandler<ScreenshotsConfig> = ConfigClassHandler.createBuilder(ScreenshotsConfig::class.java)
+            .serializer {
+                GsonConfigSerializerBuilder.create(it)
+                    .setPath(FabricLoader.getInstance().configDir.resolve("screenshots.json"))
+                    .build()
+            }
             .build()
 
         fun createScreen(parent: Screen): Screen {
-            return YetAnotherConfigLib.create(INSTANCE) { defaults: Config, config: Config, builder: YetAnotherConfigLib.Builder ->
+            return YetAnotherConfigLib.create(CONFIG) { defaults: ScreenshotsConfig, config: ScreenshotsConfig, builder: YetAnotherConfigLib.Builder ->
                 val pauseGameWhileCroppingOption: Option<Boolean> = Option.createBuilder<Boolean>()
                     .name(Text.translatable("screenshots.setting.pause_crop.title"))
                     .description(OptionDescription.of(Text.translatable("screenshots.setting.pause_crop.description")))
@@ -72,8 +77,8 @@ class Config {
                     .binding(defaults.enabled, { config.enabled }) { config.enabled = it }
                     .controller(TickBoxControllerBuilder::create)
                     .listener { _, value: Boolean ->
-                        pauseGameWhileCroppingOption.setAvailable(value)
                         cropImageOption.setAvailable(value)
+                        pauseGameWhileCroppingOption.setAvailable(value)
                         saveScreenshotOption.setAvailable(value)
                         copyToClipboardOption.setAvailable(value)
                     }

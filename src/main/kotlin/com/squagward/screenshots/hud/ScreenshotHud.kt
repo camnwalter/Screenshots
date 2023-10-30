@@ -1,7 +1,7 @@
 package com.squagward.screenshots.hud
 
 import com.squagward.screenshots.Screenshots
-import com.squagward.screenshots.config.Config
+import com.squagward.screenshots.config.ScreenshotsConfig
 import com.squagward.screenshots.event.ScreenDragCallback
 import com.squagward.screenshots.screen.ScreenshotScreen
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
@@ -47,7 +47,7 @@ object ScreenshotHud {
                 context.matrices.push()
                 context.matrices.translate(0f, 0f, 100f)
 
-                if (Config.INSTANCE.config.pauseGameWhileCropping) {
+                if (ScreenshotsConfig.CONFIG.instance().pauseGameWhileCropping) {
                     renderPausedBackground(context)
                 }
 

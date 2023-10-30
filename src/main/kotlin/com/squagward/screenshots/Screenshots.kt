@@ -1,7 +1,7 @@
 package com.squagward.screenshots
 
 import com.squagward.screenshots.compat.MacOSCompat
-import com.squagward.screenshots.config.Config
+import com.squagward.screenshots.config.ScreenshotsConfig
 import com.squagward.screenshots.hud.ScreenshotHud
 import net.fabricmc.api.ClientModInitializer
 import net.minecraft.client.MinecraftClient
@@ -28,11 +28,11 @@ object Screenshots : ClientModInitializer {
         LOGGER.info("Initialized Screenshots!")
 
         ScreenshotHud.init()
-        Config.INSTANCE.load()
+        ScreenshotsConfig.CONFIG.load()
     }
 
     fun copyToClipboard(image: NativeImage) {
-        if (System.getProperty("os.name")?.startsWith("Mac") == true) {
+        if (MinecraftClient.IS_SYSTEM_MAC) {
             MacOSCompat.doCopyMacOS(image)
             return
         }

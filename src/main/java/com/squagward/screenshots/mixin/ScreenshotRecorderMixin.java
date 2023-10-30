@@ -2,7 +2,7 @@ package com.squagward.screenshots.mixin;
 
 import com.llamalad7.mixinextras.injector.WrapWithCondition;
 import com.squagward.screenshots.Screenshots;
-import com.squagward.screenshots.config.Config;
+import com.squagward.screenshots.config.ScreenshotsConfig;
 import com.squagward.screenshots.hud.ScreenshotHud;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.util.ScreenshotRecorder;
@@ -16,7 +16,7 @@ import java.io.File;
 public class ScreenshotRecorderMixin {
     @ModifyVariable(method = "saveScreenshotInner", at = @At("STORE"))
     private static NativeImage screenshots$cropImage(NativeImage original) {
-        Config config = Config.INSTANCE.getConfig();
+        ScreenshotsConfig config = ScreenshotsConfig.CONFIG.instance();
         if (!config.getEnabled()) {
             return original;
         }
@@ -36,7 +36,7 @@ public class ScreenshotRecorderMixin {
 
     @WrapWithCondition(method = "method_1661", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/texture/NativeImage;writeTo(Ljava/io/File;)V"))
     private static boolean screenshots$shouldWriteToFile(NativeImage image, File file) {
-        Config config = Config.INSTANCE.getConfig();
+        ScreenshotsConfig config = ScreenshotsConfig.CONFIG.instance();
         return !config.getEnabled() || (config.getEnabled() && config.getSaveScreenshotFile());
     }
 }

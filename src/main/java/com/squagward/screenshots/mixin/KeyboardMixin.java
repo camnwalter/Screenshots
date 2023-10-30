@@ -4,7 +4,7 @@ import com.llamalad7.mixinextras.injector.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.squagward.screenshots.Screenshots;
-import com.squagward.screenshots.config.Config;
+import com.squagward.screenshots.config.ScreenshotsConfig;
 import com.squagward.screenshots.hud.ScreenshotHud;
 import com.squagward.screenshots.screen.ScreenshotScreen;
 import net.minecraft.client.Keyboard;
@@ -15,7 +15,6 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 
 import java.io.File;
 import java.util.function.Consumer;
@@ -34,7 +33,7 @@ public class KeyboardMixin {
             )
     )
     private void screenshots$openhud(File gameDirectory, Framebuffer framebuffer, Consumer<Text> messageReceiver, Operation<Void> original) {
-        Config config = Config.INSTANCE.getConfig();
+        ScreenshotsConfig config = ScreenshotsConfig.CONFIG.instance();
         if (!config.getEnabled() || !config.getCropImage()) {
             original.call(gameDirectory, framebuffer, messageReceiver);
             return;
