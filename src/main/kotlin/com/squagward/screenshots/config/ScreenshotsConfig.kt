@@ -38,7 +38,7 @@ class ScreenshotsConfig {
             }
             .build()
 
-        fun createScreen(parent: Screen): Screen {
+        fun createScreen(parent: Screen?): Screen {
             return YetAnotherConfigLib.create(CONFIG) { defaults: ScreenshotsConfig, config: ScreenshotsConfig, builder: YetAnotherConfigLib.Builder ->
                 val pauseGameWhileCroppingOption: Option<Boolean> = Option.createBuilder<Boolean>()
                     .name(Text.translatable("screenshots.setting.pause_crop.title"))
