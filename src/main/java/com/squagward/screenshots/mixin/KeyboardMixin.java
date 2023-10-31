@@ -1,6 +1,5 @@
 package com.squagward.screenshots.mixin;
 
-import com.llamalad7.mixinextras.injector.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.squagward.screenshots.Screenshots;
@@ -48,13 +47,5 @@ public class KeyboardMixin {
                 Screenshots.INSTANCE.setDisplayScreenshotScreen(true);
             });
         }
-    }
-
-    @WrapWithCondition(method = "onKey", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;openGameMenu(Z)V"))
-    private boolean screenshots$dontOpenPauseMenu(MinecraftClient client, boolean pause) {
-        boolean shouldOpenPauseMenu = !Screenshots.INSTANCE.getDisplayScreenshotScreen();
-        Screenshots.INSTANCE.setDisplayScreenshotScreen(false);
-
-        return shouldOpenPauseMenu;
     }
 }
