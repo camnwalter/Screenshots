@@ -30,20 +30,23 @@ class ScreenshotsConfig {
 
     companion object {
         @JvmField
-        val CONFIG: ConfigClassHandler<ScreenshotsConfig> = ConfigClassHandler.createBuilder(ScreenshotsConfig::class.java)
-            .serializer {
-                GsonConfigSerializerBuilder.create(it)
-                    .setPath(FabricLoader.getInstance().configDir.resolve("screenshots.json"))
-                    .build()
-            }
-            .build()
+        val CONFIG: ConfigClassHandler<ScreenshotsConfig> =
+            ConfigClassHandler.createBuilder(ScreenshotsConfig::class.java)
+                .serializer {
+                    GsonConfigSerializerBuilder.create(it)
+                        .setPath(FabricLoader.getInstance().configDir.resolve("screenshots.json"))
+                        .build()
+                }
+                .build()
 
         fun createScreen(parent: Screen?): Screen {
             return YetAnotherConfigLib.create(CONFIG) { defaults: ScreenshotsConfig, config: ScreenshotsConfig, builder: YetAnotherConfigLib.Builder ->
                 val pauseGameWhileCroppingOption: Option<Boolean> = Option.createBuilder<Boolean>()
                     .name(Text.translatable("screenshots.setting.pause_crop.title"))
                     .description(OptionDescription.of(Text.translatable("screenshots.setting.pause_crop.description")))
-                    .binding(defaults.pauseGameWhileCropping, { config.pauseGameWhileCropping }) { config.pauseGameWhileCropping = it }
+                    .binding(
+                        defaults.pauseGameWhileCropping,
+                        { config.pauseGameWhileCropping }) { config.pauseGameWhileCropping = it }
                     .controller(TickBoxControllerBuilder::create)
                     .build()
 
@@ -60,14 +63,18 @@ class ScreenshotsConfig {
                 val saveScreenshotOption: Option<Boolean> = Option.createBuilder<Boolean>()
                     .name(Text.translatable("screenshots.setting.save_file.title"))
                     .description(OptionDescription.of(Text.translatable("screenshots.setting.save_file.description")))
-                    .binding(defaults.saveScreenshotFile, { config.saveScreenshotFile }) { config.saveScreenshotFile = it }
+                    .binding(
+                        defaults.saveScreenshotFile,
+                        { config.saveScreenshotFile }) { config.saveScreenshotFile = it }
                     .controller(TickBoxControllerBuilder::create)
                     .build()
 
                 val copyToClipboardOption: Option<Boolean> = Option.createBuilder<Boolean>()
                     .name(Text.translatable("screenshots.setting.copy.title"))
                     .description(OptionDescription.of(Text.translatable("screenshots.setting.copy.description")))
-                    .binding(defaults.copyToClipboard, { config.copyToClipboard }) { config.copyToClipboard = it }
+                    .binding(
+                        defaults.copyToClipboard,
+                        { config.copyToClipboard }) { config.copyToClipboard = it }
                     .controller(TickBoxControllerBuilder::create)
                     .build()
 
@@ -95,7 +102,9 @@ class ScreenshotsConfig {
                             .option(saveScreenshotOption)
                             .option(copyToClipboardOption)
                             .build()
-                    )
+                    ).screenInit {
+                        pauseGameWhileCroppingOption.setAvailable(cropImageOption.binding().value)
+                    }
             }
                 .generateScreen(parent)
         }
