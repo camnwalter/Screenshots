@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
 import net.fabricmc.fabric.api.client.screen.v1.ScreenKeyboardEvents
 import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.gl.Framebuffer
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.texture.NativeImage
@@ -39,17 +40,17 @@ object ScreenshotHud {
             ScreenEvents.afterRender(screen).register { _, context: DrawContext, _, _, _ ->
                 if (!Screenshots.displayScreenshotHud) return@register
 
+                if (ScreenshotsConfig.CONFIG.instance().pauseGameWhileCropping) {
+                    renderPausedBackground(context)
+                }
+
                 val left = getLeft()
                 val right = getRight()
                 val top = getTop()
                 val bottom = getBottom()
 
                 context.matrices.push()
-                context.matrices.translate(0f, 0f, 100f)
-
-                if (ScreenshotsConfig.CONFIG.instance().pauseGameWhileCropping) {
-                    renderPausedBackground(context)
-                }
+                context.matrices.translate(0f, 0f, 400f)
 
                 if (top != bottom && left != right) {
                     context.fill(0, 0, window.width, top.toInt(), outside)
@@ -62,11 +63,15 @@ object ScreenshotHud {
                 context.matrices.pop()
             }
 
-            ScreenMouseEvents.afterMouseClick(screen).register { _, mx, my, _ ->
-                if (!Screenshots.displayScreenshotHud) return@register
+            ScreenMouseEvents.allowMouseClick(screen).register { _, mx, my, _ ->
+                if (Screenshots.displayScreenshotHud) {
+                    startCorner = mx to my
+                    stopCorner = mx to my
 
-                startCorner = mx to my
-                stopCorner = mx to my
+                    false
+                } else {
+                    true
+                }
             }
 
             ScreenDragCallback.EVENT.register { _, mx, my, _, _ ->
@@ -97,11 +102,14 @@ object ScreenshotHud {
             }
 
             ScreenKeyboardEvents.allowKeyPress(screen).register { _, key, _, _ ->
-                if (Screenshots.displayScreenshotHud && key == GLFW.GLFW_KEY_ESCAPE) {
-                    Screenshots.displayScreenshotHud = false
-                    destroy()
+                if (Screenshots.displayScreenshotHud) {
+                    if (key == GLFW.GLFW_KEY_ESCAPE) {
+                        Screenshots.displayScreenshotHud = false
+                        destroy()
+                        return@register true
+                    }
 
-                    screen is ScreenshotScreen
+                    false
                 } else {
                     true
                 }
@@ -115,18 +123,19 @@ object ScreenshotHud {
         image = null
     }
 
-    private fun updateImage() {
-        if (image == null) {
-            image = ScreenshotRecorder.takeScreenshot(mc.framebuffer)
-            texture = NativeImageBackedTexture(image)
-            mc.textureManager.registerTexture(id, texture)
-        }
+    fun updateBackgroundImage(fb: Framebuffer) {
+        destroy()
+
+        image = ScreenshotRecorder.takeScreenshot(fb)
+        texture = NativeImageBackedTexture(image)
+        mc.textureManager.registerTexture(id, texture)
     }
 
     private fun renderPausedBackground(ctx: DrawContext) {
-        updateImage()
+        if (image == null) return
 
         ctx.matrices.push()
+        ctx.matrices.translate(0f, 0f, 400f)
         ctx.matrices.scale(
             (1 / window.scaleFactor).toFloat(),
             (1 / window.scaleFactor).toFloat(),
