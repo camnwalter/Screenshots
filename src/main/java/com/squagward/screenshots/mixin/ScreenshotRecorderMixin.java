@@ -6,11 +6,15 @@ import com.squagward.screenshots.config.ScreenshotsConfig;
 import com.squagward.screenshots.hud.ScreenshotHud;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.util.ScreenshotRecorder;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.io.File;
+import java.util.function.Consumer;
 
 @Mixin(ScreenshotRecorder.class)
 public class ScreenshotRecorderMixin {
@@ -34,9 +38,12 @@ public class ScreenshotRecorderMixin {
         return image;
     }
 
-    @WrapWithCondition(method = "method_1661", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/texture/NativeImage;writeTo(Ljava/io/File;)V"))
-    private static boolean screenshots$shouldWriteToFile(NativeImage image, File file) {
+    @Inject(method = "method_1661", at = @At("HEAD"), cancellable = true)
+    private static void screenshots$shouldWriteToFile(NativeImage nativeImage, File file, Consumer<Text> consumer, CallbackInfo ci) {
         ScreenshotsConfig config = ScreenshotsConfig.CONFIG.instance();
-        return !config.getEnabled() || (config.getEnabled() && config.getSaveScreenshotFile());
+        if (config.getEnabled() && !config.getSaveScreenshotFile()) {
+            nativeImage.close();
+            ci.cancel();
+        }
     }
 }
