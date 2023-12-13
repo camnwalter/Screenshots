@@ -1,8 +1,7 @@
 plugins {
     kotlin("jvm") version "1.9.0"
-    kotlin("plugin.serialization") version "1.9.0"
-    id("fabric-loom") version "1.3-SNAPSHOT"
-    id("io.github.juuxel.loom-vineflower") version "1.11.0"
+    kotlin("plugin.serialization") version "1.9.21"
+    id("fabric-loom") version "1.4-SNAPSHOT"
 }
 
 version = property("mod_version")!!.toString()
@@ -20,7 +19,6 @@ repositories {
     // for more information about repositories.
     maven("https://maven.isxander.dev/releases")
     maven("https://maven.terraformersmc.com/releases")
-    maven("https://oss.sonatype.org/content/repositories/snapshots/") // for yacl stuff, temporary
 }
 
 dependencies {
@@ -28,13 +26,17 @@ dependencies {
     minecraft("com.mojang:minecraft:${property("minecraft_version")}")
     mappings("net.fabricmc:yarn:${property("yarn_mappings")}:v2")
     modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
+
+    // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
     modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
 
-    include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:${property("mixin_extras_version")}")!!)!!)
     modImplementation("dev.isxander.yacl:yet-another-config-lib-fabric:${property("yacl_version")}")
-    modApi("com.terraformersmc:modmenu:${property("modmenu_version")}")
-    implementation("ca.weblite:java-objc-bridge:1.0.0")
+    modApi("com.terraformersmc:modmenu:${property("modmenu_version")}") {
+        exclude("net.fabricmc")
+    }
+
+    implementation("ca.weblite:java-objc-bridge:1.2")
 }
 
 tasks {

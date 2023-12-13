@@ -1,6 +1,5 @@
 package com.squagward.screenshots.mixin;
 
-import com.llamalad7.mixinextras.injector.WrapWithCondition;
 import com.squagward.screenshots.Screenshots;
 import com.squagward.screenshots.config.ScreenshotsConfig;
 import com.squagward.screenshots.hud.ScreenshotHud;

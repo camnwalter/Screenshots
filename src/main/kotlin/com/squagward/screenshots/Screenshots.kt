@@ -1,9 +1,12 @@
 package com.squagward.screenshots
 
+import com.mojang.brigadier.Command
 import com.squagward.screenshots.compat.MacOSCompat
 import com.squagward.screenshots.config.ScreenshotsConfig
 import com.squagward.screenshots.hud.ScreenshotHud
 import net.fabricmc.api.ClientModInitializer
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.texture.NativeImage
 import net.minecraft.text.Text
@@ -29,6 +32,20 @@ object Screenshots : ClientModInitializer {
 
         ScreenshotHud.init()
         ScreenshotsConfig.CONFIG.load()
+
+        ClientCommandRegistrationCallback.EVENT.register { dispatcher, _ ->
+            dispatcher.register(
+                literal("screenshots").executes {
+                    val client: MinecraftClient = MinecraftClient.getInstance()
+
+                    client.send {
+                        client.setScreen(ScreenshotsConfig.createScreen(null))
+                    }
+
+                    Command.SINGLE_SUCCESS
+                }
+            )
+        }
     }
 
     fun copyToClipboard(image: NativeImage) {
