@@ -1,0 +1,20 @@
+{
+    "modmenu.nameTranslation.screenshots": "擷圖",
+    "modmenu.summaryTranslation.screenshots": "為擷圖新增更多功能，例如裁剪和複製到剪貼簿。",
+    "modmenu.descriptionTranslation.screenshots": "為擷圖新增更多功能，例如裁剪和複製到剪貼簿。",
+
+    "screenshots.error.copy": "Screenshots 無法將擷圖複製到剪貼簿。",
+
+    "screenshots.setting.title": "擷圖設定",
+    "screenshots.setting.general": "一般",
+    "screenshots.setting.enable.title": "啟用模組",
+    "screenshots.setting.enable.description": "停用這項設定將會完全停用這個模組，導致所有功能恢復正常。",
+    "screenshots.setting.crop.title": "裁剪擷圖",
+    "screenshots.setting.crop.description": "啟用後，每當按下擷圖快捷鍵時，將會出現一個類似剪取工具的視窗。拖曳要擷取的選定區域，只會擷取該部分。",
+    "screenshots.setting.pause_crop.title": "裁剪時暫停遊戲",
+    "screenshots.setting.pause_crop.description": "啟用後，每當顯示裁剪 HUD 時，遊戲將會顯示為已暫停。",
+    "screenshots.setting.save_file.title": "儲存擷圖檔案",
+    "screenshots.setting.save_file.description": "啟用後，將會像往常一樣建立擷圖檔案。",
+    "screenshots.setting.copy.title": "將擷圖複製到剪貼簿",
+    "screenshots.setting.copy.description": "啟用後，擷圖影像將會被複製到剪貼簿。"
+}
