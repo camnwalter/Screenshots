@@ -1,7 +1,6 @@
 package com.squagward.screenshots.hud
 
 import com.squagward.screenshots.Screenshots
-import com.squagward.screenshots.config.ScreenshotsConfig
 import com.squagward.screenshots.event.ScreenDragCallback
 import com.squagward.screenshots.screen.ScreenshotScreen
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
@@ -42,7 +41,7 @@ object ScreenshotHud {
             ScreenEvents.afterRender(screen).register { _, context: DrawContext, _, _, _ ->
                 if (!Screenshots.displayScreenshotHud) return@register
 
-                if (ScreenshotsConfig.CONFIG.instance().pauseGameWhileCropping) {
+                if (Screenshots.config.pauseGameWhileCropping) {
                     renderPausedBackground(context)
                 }
 
@@ -90,7 +89,7 @@ object ScreenshotHud {
                     mc.runDirectory,
                     mc.framebuffer
                 ) { message: Text ->
-                    if (ScreenshotsConfig.CONFIG.instance().saveScreenshotFile) {
+                    if (Screenshots.config.saveScreenshotFile) {
                         mc.execute { mc.inGameHud.chatHud.addMessage(message) }
                     }
                 }
@@ -125,6 +124,7 @@ object ScreenshotHud {
         image = null
     }
 
+    @JvmStatic
     fun updateBackgroundImage(fb: Framebuffer) {
         destroy()
 
@@ -187,6 +187,7 @@ object ScreenshotHud {
         return croppedImage
     }
 
+    @JvmStatic
     fun reset() {
         startCorner = 0.0 to 0.0
         stopCorner = 0.0 to 0.0
@@ -200,5 +201,6 @@ object ScreenshotHud {
 
     private fun getBottom(): Double = max(startCorner.second, stopCorner.second)
 
+    /** no-op used to load the init block */
     fun init() {}
 }

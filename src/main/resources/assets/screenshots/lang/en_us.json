@@ -5,16 +5,16 @@
 
     "screenshots.error.copy": "Screenshots was unable to copy the screenshot to the clipboard.",
 
-    "screenshots.setting.title": "Screenshots Config",
-    "screenshots.setting.general": "General",
-    "screenshots.setting.enable.title": "Enable Mod",
+    "yacl3.config.screenshots.title": "Screenshots Config",
+    "yacl3.config.screenshots.category.general": "General",
+    "yacl3.config.screenshots.category.general.root.option.enabled": "Enable Mod",
     "screenshots.setting.enable.description": "Disabling this setting completely disables the mod, causing all functionality returning back to normal.",
-    "screenshots.setting.crop.title": "Crop Screenshots",
+    "yacl3.config.screenshots.category.general.root.option.cropImage": "Crop Screenshots",
     "screenshots.setting.crop.description": "When enabled, whenever the screenshot keybind is pressed, a snipping-tool like window will appear. Drag the selected area you want to screenshot and only that part will be captured.",
-    "screenshots.setting.pause_crop.title": "Pause Game While Cropping",
+    "yacl3.config.screenshots.category.general.root.option.pauseWhileCropping": "Pause Game While Cropping",
     "screenshots.setting.pause_crop.description": "When enabled, whenever the cropping HUD is displayed, the game will appear paused.",
-    "screenshots.setting.save_file.title": "Save Screenshot File",
+    "yacl3.config.screenshots.category.general.root.option.saveScreenshot": "Save Screenshot File",
     "screenshots.setting.save_file.description": "When enabled, the screenshot file will be created like normal.",
-    "screenshots.setting.copy.title": "Copy Screenshot to Clipboard",
+    "yacl3.config.screenshots.category.general.root.option.copyToClipboard": "Copy Screenshot to Clipboard",
     "screenshots.setting.copy.description": "When enabled, the screenshot image will be copied to the clipboard."
 }

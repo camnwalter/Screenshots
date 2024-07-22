@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     kotlin("jvm") version "2.0.0"
+    kotlin("plugin.serialization") version "2.0.0"
     id("fabric-loom") version "1.7-SNAPSHOT"
 }
 

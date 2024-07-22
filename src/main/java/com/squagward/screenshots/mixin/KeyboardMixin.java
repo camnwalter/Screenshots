@@ -2,8 +2,8 @@ package com.squagward.screenshots.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.squagward.screenshots.Config;
 import com.squagward.screenshots.Screenshots;
-import com.squagward.screenshots.config.ScreenshotsConfig;
 import com.squagward.screenshots.hud.ScreenshotHud;
 import com.squagward.screenshots.screen.ScreenshotScreen;
 import net.minecraft.client.Keyboard;
@@ -34,27 +34,27 @@ public class KeyboardMixin {
             )
     )
     private void screenshots$openhud(File gameDirectory, Framebuffer framebuffer, Consumer<Text> messageReceiver, Operation<Void> original) {
-        ScreenshotsConfig config = ScreenshotsConfig.CONFIG.instance();
+        Config config = Screenshots.getConfig();
         if (!config.getEnabled() || !config.getCropImage()) {
             original.call(gameDirectory, framebuffer, messageReceiver);
             return;
         }
 
-        ScreenshotHud.INSTANCE.updateBackgroundImage(framebuffer);
-        Screenshots.INSTANCE.setDisplayScreenshotHud(true);
-        ScreenshotHud.INSTANCE.reset();
+        ScreenshotHud.updateBackgroundImage(framebuffer);
+        Screenshots.setDisplayScreenshotHud(true);
+        ScreenshotHud.reset();
 
         if (client.currentScreen == null) {
             client.send(() -> {
                 client.setScreen(new ScreenshotScreen());
-                Screenshots.INSTANCE.setDisplayScreenshotScreen(true);
+                Screenshots.setDisplayScreenshotScreen(true);
             });
         }
     }
 
     @Inject(method = "onChar", at = @At("HEAD"), cancellable = true)
     private void screenshots$cancelCharType(long window, int codePoint, int modifiers, CallbackInfo ci) {
-        if (Screenshots.INSTANCE.getDisplayScreenshotHud()) {
+        if (Screenshots.getDisplayScreenshotHud()) {
             ci.cancel();
         }
     }
